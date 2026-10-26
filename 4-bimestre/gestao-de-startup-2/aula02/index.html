@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Experimente o Cardápio e acompanhe as etapas do funil AARRR."
+    />
+    <title>Cardápio | Funil AARRR</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #25352d;
+        background: #f7f5ef;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        padding: 48px 20px;
+        background:
+          radial-gradient(ellipse at 8% 8%, #e7efdf 0, transparent 32rem),
+          #f7f5ef;
+      }
+
+      main {
+        width: min(100%, 900px);
+        margin: 0 auto;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #4d7654;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 12px;
+        font-size: clamp(2.3rem, 7vw, 4rem);
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+
+      .intro {
+        max-width: 620px;
+        margin-bottom: 28px;
+        color: #58645d;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .panel {
+        margin-top: 18px;
+        padding: clamp(22px, 5vw, 32px);
+        border: 1px solid #e4e5dc;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 16px 50px rgb(42 58 45 / 8%);
+      }
+
+      h2 {
+        margin-bottom: 8px;
+        font-size: 1.35rem;
+      }
+
+      .section-description {
+        margin-bottom: 20px;
+        color: #68736b;
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .action {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: 150px;
+        padding: 18px;
+        border: 1px solid #e4e5dc;
+        border-radius: 16px;
+        background: #fafbf8;
+      }
+
+      .action-number {
+        margin-bottom: 12px;
+        color: #4d7654;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .action h3 {
+        margin: 0 0 14px;
+        font-size: 1rem;
+      }
+
+      button {
+        min-height: 44px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 11px;
+        background: #315c3c;
+        color: #fff;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        transition: background 150ms ease, transform 150ms ease;
+      }
+
+      button:hover:not(:disabled) {
+        background: #244a2e;
+      }
+
+      button:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+
+      button:disabled {
+        background: #c7cec7;
+        color: #59635b;
+        cursor: not-allowed;
+      }
+
+      button:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #a9c5a2;
+        outline-offset: 3px;
+      }
+
+      .rating-form {
+        display: grid;
+        grid-template-columns: minmax(150px, 1fr) auto;
+        align-items: end;
+        gap: 12px;
+      }
+
+      .rating-field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      select {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid #cbd3ca;
+        border-radius: 11px;
+        background: #fff;
+        color: inherit;
+        font: inherit;
+      }
+
+      .status {
+        min-height: 22px;
+        margin: 14px 0 0;
+        color: #4d7654;
+        font-size: 0.9rem;
+      }
+
+      .status.error {
+        color: #a2332b;
+      }
+
+      .funnel {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stage {
+        min-width: 0;
+        padding: 16px 12px;
+        border: 1px solid #e4e5dc;
+        border-radius: 15px;
+        background: #f4f6f0;
+      }
+
+      .stage-name {
+        min-height: 40px;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      .stage-count {
+        margin-bottom: 12px;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .stage-conversion,
+      .stage-drop {
+        margin: 0;
+        color: #58645d;
+        font-size: 0.78rem;
+        line-height: 1.45;
+      }
+
+      .stage-drop {
+        margin-top: 4px;
+      }
+
+      .stage.worst-drop {
+        border-color: #d94b45;
+        background: #fff0ef;
+        box-shadow: inset 0 0 0 1px #d94b45;
+      }
+
+      .stage.worst-drop .stage-name,
+      .stage.worst-drop .stage-conversion,
+      .stage.worst-drop .stage-drop {
+        color: #a52e29;
+      }
+
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 14px 0 0;
+        color: #68736b;
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .legend-mark {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 auto;
+        border: 1px solid #d94b45;
+        border-radius: 3px;
+        background: #fff0ef;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .footnote {
+        margin: 0;
+        color: #68736b;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .clear-button {
+        min-height: 40px;
+        border: 1px solid #d8ded6;
+        background: transparent;
+        color: #536158;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+
+      .clear-button:hover:not(:disabled) {
+        background: #f4f6f0;
+        color: #25352d;
+      }
+
+      @media (max-width: 760px) {
+        body {
+          padding: 32px 14px;
+        }
+
+        .funnel {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .stage:last-child {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 540px) {
+        .actions {
+          grid-template-columns: 1fr;
+        }
+
+        .action {
+          min-height: 0;
+        }
+
+        .rating-form {
+          grid-template-columns: 1fr;
+        }
+
+        .footer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Funil de crescimento · AARRR</p>
+      <h1>Cardápio</h1>
+      <p class="intro">
+        Descubra os pratos, escolha o que pedir e conte para a gente o que
+        achou. Cada etapa abaixo ajuda a entender como as pessoas usam o app.
+      </p>
+
+      <section class="panel" aria-labelledby="experience-title">
+        <h2 id="experience-title">Experimente o app</h2>
+        <p class="section-description">
+          Siga as etapas conforme tiver interesse. Você pode continuar de onde
+          parou enquanto esta aba estiver aberta.
+        </p>
+        <div class="actions">
+          <article class="action">
+            <p class="action-number">Ativação</p>
+            <h3>Conheça o Cardápio</h3>
+            <button id="activate-button" type="button">Experimentar</button>
+          </article>
+          <article class="action">
+            <p class="action-number">Retenção</p>
+            <h3>Você voltaria ao app?</h3>
+            <button id="retain-button" type="button" disabled>
+              Quero usar de novo
+            </button>
+          </article>
+          <article class="action">
+            <p class="action-number">Receita</p>
+            <h3>O app vale a pena?</h3>
+            <button id="revenue-button" type="button" disabled>
+              Eu pagaria por isso
+            </button>
+          </article>
+        </div>
+
+        <form id="rating-form" class="rating-form">
+          <div class="rating-field">
+            <label for="rating">
+              Recomendação — de 0 a 10, quanto você recomendaria este app para
+              um amigo?
+            </label>
+            <select id="rating" name="rating" required disabled>
+              <option value="" selected disabled>Selecione uma nota</option>
+            </select>
+          </div>
+          <button id="rating-button" type="submit" disabled>Enviar nota</button>
+        </form>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="funnel-title">
+        <h2 id="funnel-title">Resultados do funil</h2>
+        <p class="section-description">
+          As conversões comparam cada etapa com a etapa anterior. A etapa em
+          vermelho indica a maior queda percentual observada.
+        </p>
+        <div id="funnel" class="funnel" aria-live="polite">
+          <article class="stage" data-stage="acquisition">
+            <p class="stage-name">Aquisição</p>
+            <p class="stage-count">0</p>
+            <p class="stage-conversion">Entrada no funil</p>
+            <p class="stage-drop"></p>
+          </article>
+          <article class="stage" data-stage="activation">
+            <p class="stage-name">Ativação</p>
+            <p class="stage-count">0</p>
+            <p class="stage-conversion">Conversão: —</p>
+            <p class="stage-drop">Queda: —</p>
+          </article>
+          <article class="stage" data-stage="retention">
+            <p class="stage-name">Retenção</p>
+            <p class="stage-count">0</p>
+            <p class="stage-conversion">Conversão: —</p>
+            <p class="stage-drop">Queda: —</p>
+          </article>
+          <article class="stage" data-stage="revenue">
+            <p class="stage-name">Receita</p>
+            <p class="stage-count">0</p>
+            <p class="stage-conversion">Conversão: —</p>
+            <p class="stage-drop">Queda: —</p>
+          </article>
+          <article class="stage" data-stage="recommendation">
+            <p class="stage-name">Recomendação · NPS 9–10</p>
+            <p class="stage-count">0</p>
+            <p class="stage-conversion">Conversão: —</p>
+            <p class="stage-drop">Queda: —</p>
+          </article>
+        </div>
+        <p class="legend">
+          <span class="legend-mark" aria-hidden="true"></span>
+          <span id="drop-summary">Ainda não há queda para comparar.</span>
+        </p>
+        <div class="footer">
+          <p class="footnote">
+            Os dados são salvos neste navegador. Cada aba conta uma aquisição
+            por visita e registra cada etapa uma única vez.
+          </p>
+          <button id="clear-button" class="clear-button" type="button">
+            Limpar dados
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const STORAGE_KEY = "cardapio-aarrr-v1";
+      const VISIT_KEY = "cardapio-aarrr-visit";
+      const stages = [
+        "acquisition",
+        "activation",
+        "retention",
+        "revenue",
+        "recommendation",
+      ];
+      const actionButtons = {
+        activation: document.querySelector("#activate-button"),
+        retention: document.querySelector("#retain-button"),
+        revenue: document.querySelector("#revenue-button"),
+      };
+      const ratingForm = document.querySelector("#rating-form");
+      const ratingSelect = document.querySelector("#rating");
+      const ratingButton = document.querySelector("#rating-button");
+      const statusMessage = document.querySelector("#status");
+      const clearButton = document.querySelector("#clear-button");
+      const dropSummary = document.querySelector("#drop-summary");
+      let data;
+      let visitId;
+
+      for (let score = 0; score <= 10; score += 1) {
+        const option = document.createElement("option");
+        option.value = String(score);
+        option.textContent = String(score);
+        ratingSelect.append(option);
+      }
+
+      function createEmptyData() {
+        return {
+          acquisition: [],
+          activation: [],
+          retention: [],
+          revenue: [],
+          recommendation: [],
+          ratings: [],
+        };
+      }
+
+      function isValidData(value) {
+        return (
+          value !== null &&
+          typeof value === "object" &&
+          stages.every(
+            (stage) =>
+              Array.isArray(value[stage]) &&
+              value[stage].every((id) => typeof id === "string"),
+          ) &&
+          Array.isArray(value.ratings) &&
+          value.ratings.every(
+            (rating) =>
+              rating !== null &&
+              typeof rating === "object" &&
+              typeof rating.id === "string" &&
+              Number.isInteger(rating.score) &&
+              rating.score >= 0 &&
+              rating.score <= 10,
+          )
+        );
+      }
+
+      function loadData() {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData === null) {
+          return createEmptyData();
+        }
+
+        const parsedData = JSON.parse(savedData);
+        if (!isValidData(parsedData)) {
+          throw new Error("Os dados salvos do funil têm um formato inválido.");
+        }
+
+        return parsedData;
+      }
+
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function createVisitId() {
+        if (typeof crypto !== "undefined" && crypto.randomUUID) {
+          return crypto.randomUUID();
+        }
+
+        return `visit-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      }
+
+      function hasReached(stage) {
+        return data[stage].includes(visitId);
+      }
+
+      function hasRated() {
+        return data.ratings.some((rating) => rating.id === visitId);
+      }
+
+      function addVisitToStage(stage) {
+        if (hasReached(stage)) {
+          return false;
+        }
+
+        data[stage].push(visitId);
+        saveData();
+        return true;
+      }
+
+      function formatPercentage(value) {
+        return `${value.toLocaleString("pt-BR", {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        })}%`;
+      }
+
+      function renderFunnel() {
+        let largestDrop = -1;
+        let largestDropStage = null;
+
+        stages.forEach((stage, index) => {
+          const card = document.querySelector(`[data-stage="${stage}"]`);
+          const count = data[stage].length;
+          card.querySelector(".stage-count").textContent = String(count);
+          card.classList.remove("worst-drop");
+
+          if (index === 0) {
+            return;
+          }
+
+          const previousCount = data[stages[index - 1]].length;
+          const conversion =
+            previousCount === 0 ? null : (count / previousCount) * 100;
+          const conversionText =
+            conversion === null ? "—" : formatPercentage(conversion);
+          const drop = conversion === null ? null : 100 - conversion;
+
+          card.querySelector(
+            ".stage-conversion",
+          ).textContent = `Conversão: ${conversionText}`;
+          card.querySelector(".stage-drop").textContent =
+            drop === null ? "Queda: —" : `Queda: ${formatPercentage(drop)}`;
+
+          if (drop !== null && drop > largestDrop) {
+            largestDrop = drop;
+            largestDropStage = stage;
+          }
+        });
+
+        if (largestDropStage === null) {
+          dropSummary.textContent = "Ainda não há queda para comparar.";
+          return;
+        }
+
+        const card = document.querySelector(
+          `[data-stage="${largestDropStage}"]`,
+        );
+        const stageName = card.querySelector(".stage-name").textContent;
+        card.classList.add("worst-drop");
+        dropSummary.textContent = `Maior queda: ${formatPercentage(
+          largestDrop,
+        )} antes de ${stageName}.`;
+      }
+
+      function updateJourney() {
+        actionButtons.activation.disabled = hasReached("activation");
+        actionButtons.retention.disabled =
+          !hasReached("activation") || hasReached("retention");
+        actionButtons.revenue.disabled =
+          !hasReached("retention") || hasReached("revenue");
+        ratingSelect.disabled =
+          !hasReached("revenue") || hasRated();
+        ratingButton.disabled =
+          !hasReached("revenue") || hasRated();
+      }
+
+      function setStatus(message, isError = false) {
+        statusMessage.textContent = message;
+        statusMessage.classList.toggle("error", isError);
+      }
+
+      function handleStorageError(error, message) {
+        setStatus(message, true);
+        Object.values(actionButtons).forEach((button) => {
+          button.disabled = true;
+        });
+        ratingSelect.disabled = true;
+        ratingButton.disabled = true;
+        clearButton.disabled = true;
+        console.error("Erro ao atualizar os dados do funil AARRR:", error);
+      }
+
+      try {
+        data = loadData();
+        visitId = sessionStorage.getItem(VISIT_KEY);
+        if (!visitId) {
+          visitId = createVisitId();
+          sessionStorage.setItem(VISIT_KEY, visitId);
+        }
+
+        addVisitToStage("acquisition");
+        renderFunnel();
+        updateJourney();
+      } catch (error) {
+        handleStorageError(
+          error,
+          "Não foi possível carregar ou salvar os dados. Verifique o armazenamento deste navegador.",
+        );
+      }
+
+      Object.entries(actionButtons).forEach(([stage, button]) => {
+        button.addEventListener("click", () => {
+          try {
+            if (addVisitToStage(stage)) {
+              renderFunnel();
+              updateJourney();
+              const messages = {
+                activation: "Ativação registrada. Você experimentou o app!",
+                retention: "Retenção registrada. Obrigado por voltar!",
+                revenue: "Receita registrada. Obrigado pela resposta!",
+              };
+              setStatus(messages[stage]);
+            }
+          } catch (error) {
+            handleStorageError(
+              error,
+              "Não foi possível salvar esta etapa. Tente novamente.",
+            );
+          }
+        });
+      });
+
+      ratingForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!ratingForm.reportValidity()) {
+          return;
+        }
+
+        if (hasRated()) {
+          setStatus("Sua nota para esta visita já foi registrada.");
+          return;
+        }
+
+        const score = Number(ratingSelect.value);
+        data.ratings.push({ id: visitId, score });
+        if (score >= 9) {
+          data.recommendation.push(visitId);
+        }
+
+        try {
+          saveData();
+          renderFunnel();
+          updateJourney();
+          setStatus(
+            score >= 9
+              ? "Nota registrada como recomendação. Obrigado!"
+              : "Nota registrada. Notas 9 e 10 contam como recomendação no funil.",
+          );
+        } catch (error) {
+          data.ratings.pop();
+          if (score >= 9) {
+            data.recommendation.pop();
+          }
+          handleStorageError(
+            error,
+            "Não foi possível salvar sua nota. Tente novamente.",
+          );
+        }
+      });
+
+      clearButton.addEventListener("click", () => {
+        if (!window.confirm("Deseja apagar todos os dados do funil?")) {
+          return;
+        }
+
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          sessionStorage.removeItem(VISIT_KEY);
+          data = createEmptyData();
+          visitId = createVisitId();
+          sessionStorage.setItem(VISIT_KEY, visitId);
+          addVisitToStage("acquisition");
+          renderFunnel();
+          updateJourney();
+          setStatus("Dados apagados. Esta visita iniciou um novo funil.");
+          clearButton.disabled = false;
+        } catch (error) {
+          handleStorageError(
+            error,
+            "Não foi possível limpar os dados. Verifique o armazenamento deste navegador.",
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
