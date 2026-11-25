@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "cliente": "Ana",
+    "produto": "Dipirona",
+    "valor": 12,
+    "status": "cancelada"
+  }
+]
